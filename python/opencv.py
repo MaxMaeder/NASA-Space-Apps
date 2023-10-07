@@ -1,21 +1,25 @@
-from astropy.io import fits
 import numpy as np
-from matplotlib.colors import ListedColormap
-from matplotlib import cm
-import matplotlib.pyplot as plt
-from astropy.visualization import astropy_mpl_style
-from astropy.utils.data import get_pkg_data_filename
+import argparse
+import cv2
 
-image_file = get_pkg_data_filename('sample.fits')
-plt.style.use(astropy_mpl_style)
-image_data = fits.getdata(image_file, ext=0)
-print(image_data.shape)
+# We want size, intensity, coordinate from least to greatest
 
-plt.figure()
+# Finds the brighest hotspot of the image
+# Returns the coordinates
+def findBrightspot(image):
+    # Convert image to grayscale for simplified analysis
+    image = cv2.imread(args["image"])
+    orig = image.copy()
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-viridisBig = cm.get_cmap('plasma', 512)
-newcmp = ListedColormap(viridisBig(np.linspace(0.1, 0.75, 512)))
+    # Apply a gaussian blur
+    gray = cv2.GaussianBlur(gray, (args["radius"], args["radius"]), 0)
+    (minVal, maxVal, minLoc, maxLoc) = cv2.minMaxLoc(gray)
+    
+    return maxLoc
 
-plt.imshow(image_data, cmap=newcmp)
-plt.colorbar()
-plt.show()
+# Centers an image around an origin, with a cropping about the origin by offset
+def centerImage(image, origin, offset):
+    crop_img = img[y: y + offset, x: x + offset]
+    cv2.imshow("cropped", crop_img)
+    cv2.waitKey(0)
