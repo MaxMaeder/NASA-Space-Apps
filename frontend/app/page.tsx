@@ -1,6 +1,9 @@
+"use client";
+
 import Chart from 'chart.js/auto';
-import Header from "./index/header";
+import Header from "./index/Header";
 import Image from 'next/image'
+import ImageCanvas from './index/ImageCanvas';
 
 const config = {
   type: 'line',
@@ -22,7 +25,9 @@ const config = {
 
 export default function Home() {
   return (
-    <>
+    <div className="flex flex-col overflow-hidden">
+      <ImageCanvas />
+    {/*
       <div>
 
         <div className={"flex flex-row w-full mt-4 pt-4 px-4 space-x-4"}>
@@ -50,13 +55,12 @@ export default function Home() {
               <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>Restart ⏹︎</div>
             </div>
 
-            {/* Chart */}
             {config && <canvas id="myChart" width="400" height="400"></canvas>}
           </div>
         </div>
-      </div>
+  </div>*/}
 
       <p className={"text-sm text-slate-800 px-3 mb-2"}>Created for the Nasa Space Apps hackathon fall, 2023 - By Aishani Das-Ghosh, Jeremy Kintana, Max Maeder, Rahul Hathwar</p>
-    </>
+    </div>
   )
 }

@@ -1,6 +1,6 @@
 import './globals.css'
 
-import Header from './index/header'
+import Header from './index/Header'
 import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
 
@@ -18,9 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={inter.className + " flex flex-col"}>
         <Header />
-        <main className="flex min-h-screen flex-col pt-12 px-12 justify-between background bg-slate-900">
+        <main className="grow pt-12 px-12 justify-between background bg-slate-900 overflow-hidden">
           {children}
         </main>
       </body>
