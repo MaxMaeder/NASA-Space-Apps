@@ -4,6 +4,8 @@ import Chart from 'chart.js/auto';
 import Header from "./index/Header";
 import Image from 'next/image'
 import ImageCanvas from './index/ImageCanvas';
+import { motion } from 'framer-motion';
+import Button from './components/button';
 
 const config = {
   type: 'line',
@@ -29,6 +31,11 @@ export default function Home() {
       <ImageCanvas />
     {/*
       <div>
+        <div className={"w-full flex flex-row mt-0 font-mono font-semibold space-x-2 px-4 text-slate-400"}>
+          <Button text="Preset Datasets" onClick={() => {}} />
+          <Button text="Upload a custom data set..." onClick={() => {}} />
+          <Button text="Render" onClick={() => {}} />
+        </div>
 
         <div className={"flex flex-row w-full mt-4 pt-4 px-4 space-x-4"}>
           <div className={"w-1/2"}>
@@ -38,24 +45,25 @@ export default function Home() {
 
             <div className={"flex flex-row mt-4 font-mono font-semibold space-x-2 justify-between text-slate-400"}>
               <div className={"flex flex-row space-x-2"}>
-                <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>{"<< First"}</div>
-                <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>{"< Previous"}</div>
+                <Button text="<< First" onClick={() => {}} />
+                <Button text="< Previous" onClick={() => {}} />
               </div>
 
               <div className={"flex flex-row space-x-2"}>
-                <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>{"Next >"}</div>
-                <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>{"Last >>"}</div>
+                <Button text="Next >" onClick={() => {}} />
+                <Button text="Last >>" onClick={() => {}} />
               </div>
             </div>
           </div>
 
           <div>
             <div className={"flex flex-row font-mono font-semibold space-x-2 justify-end text-slate-400"}>
-              <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>Start ⏵︎</div>
-              <div className={"border-2 border-slate-800 text-lg p-1 rounded-lg w-fit"}>Restart ⏹︎</div>
+            <Button text="Start ⏵︎" onClick={() => {}} />
+            <Button text="Restart ⏹︎" onClick={() => {}} />
             </div>
 
-            {config && <canvas id="myChart" width="400" height="400"></canvas>}
+            {/* Chart */}
+            {/* {config && <canvas id="myChart" width="400" height="400"></canvas>} */}
           </div>
         </div>
   </div>*/}
