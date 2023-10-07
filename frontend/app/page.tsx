@@ -5,7 +5,9 @@ import Chart from 'chart.js/auto';
 import Header from "./index/Header";
 import Image from 'next/image'
 import ImageCanvas from './index/ImageCanvas';
+import constrain from './util/constrain';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 
 const config = {
   type: 'line',
@@ -24,17 +26,25 @@ const config = {
   },
 };
 
+const images = ["test.png", "test2.png"];
+
 
 export default function Home() {
+  const [imgNum, setImgNum] = useState(0);
+
+  const changeImg = (i: number) => {
+    setImgNum(constrain(imgNum + i, 0, images.length - 1));
+  }
+
   return (
     <div className="flex flex-col overflow-hidden relative">
-      <ImageCanvas />
+      <ImageCanvas imgSrc={images[imgNum]} />
 
       <div className="absolute bottom-10 w-full flex justify-center space-x-4">
-        <Button text="< Previous" onClick={() => {}} />
+        <Button text="< Previous" onClick={() => changeImg(-1)} />
         <Button text="Start ⏵︎" onClick={() => {}} />
         <Button text="Restart ⏹︎" onClick={() => {}} />
-        <Button text="Next >" onClick={() => {}} />
+        <Button text="Next >" onClick={() => changeImg(1)} />
       </div>
     {/*
       <div>

@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef } from "react";
 
-const ImageCanvas = () => {
+import constrain from "../util/constrain";
+
+type ImageCanvasType = {
+  imgSrc: string
+}
+
+const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const size = useRef(.8);
   
@@ -16,7 +22,8 @@ const ImageCanvas = () => {
     if (!context) return;
 
     const image = new Image();
-    image.src = "/test.png"
+    console.log(imgSrc)
+    image.src = imgSrc;
     await new Promise((resolve) => {
       image.onload = resolve;
     });
@@ -50,15 +57,13 @@ const ImageCanvas = () => {
 
       updateImage();
     });
-  }, []);
+  }, [imgSrc]);
 
   useEffect(() => {
     drawImg()
-  }, [canvasRef, drawImg]);
+  }, [canvasRef, drawImg, imgSrc]);
 
-  const constrain = (num: number, min: number, max: number) => {
-    return Math.min(Math.max(num, min), max)
-  }
+
 
   return <canvas ref={canvasRef}></canvas>
 }
