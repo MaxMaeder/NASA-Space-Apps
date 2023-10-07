@@ -27,7 +27,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
       image.onload = resolve;
     });
 
-    canvas.height = cHeight;
+    canvas.height = cHeight / 1.2; // ADDED 1.2 to make it fit better;
     canvas.width = cWidth;
     
     const updateImage = () => {
