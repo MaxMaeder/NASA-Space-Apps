@@ -22,7 +22,6 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     if (!context) return;
 
     const image = new Image();
-    console.log(imgSrc)
     image.src = imgSrc;
     await new Promise((resolve) => {
       image.onload = resolve;
@@ -42,17 +41,13 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
 
       context.clearRect(0, 0, canvas.width, canvas.height);
       context.drawImage(image, l, t, w, h);
-      console.log(size.current)
     }
     updateImage();
 
     window.addEventListener("wheel", (event) => {
-      console.log("scroll")
       const scrollEvent = event as WheelEvent;
-      const isUp = scrollEvent.deltaY > 0;
 
       const delta = scrollEvent.deltaY * .0005;
-      console.log(event, scrollEvent.deltaY)
       size.current = constrain(size.current + delta, 0.25, .9);
 
       updateImage();
@@ -63,9 +58,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     drawImg()
   }, [canvasRef, drawImg, imgSrc]);
 
-
-
-  return <canvas ref={canvasRef}></canvas>
+  return <canvas ref={canvasRef} className="z-10"></canvas>
 }
 
 export default ImageCanvas;

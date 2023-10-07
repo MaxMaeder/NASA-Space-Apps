@@ -1,5 +1,6 @@
 "use client";
 
+import BackgroundImage from './index/BackgroundImage';
 import Button from './components/button';
 import Chart from 'chart.js/auto';
 import Header from "./index/Header";
@@ -39,8 +40,9 @@ export default function Home() {
   return (
     <div className="flex flex-col overflow-hidden relative">
       <ImageCanvas imgSrc={images[imgNum]} />
+      <BackgroundImage imgSrc={images[imgNum]}/>
 
-      <div className="absolute bottom-10 w-full flex justify-center space-x-4">
+      <div className="absolute bottom-10 w-full flex justify-center space-x-4 z-20">
         <Button text="< Previous" onClick={() => changeImg(-1)} />
         <Button text="Start ⏵︎" onClick={() => {}} />
         <Button text="Restart ⏹︎" onClick={() => {}} />
