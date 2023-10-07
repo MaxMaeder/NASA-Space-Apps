@@ -27,8 +27,15 @@ const config = {
 
 export default function Home() {
   return (
-    <div className="flex flex-col overflow-hidden">
+    <div className="flex flex-col overflow-hidden relative">
       <ImageCanvas />
+
+      <div className="absolute bottom-10 w-full flex justify-center space-x-4">
+        <Button text="< Previous" onClick={() => {}} />
+        <Button text="Start ⏵︎" onClick={() => {}} />
+        <Button text="Restart ⏹︎" onClick={() => {}} />
+        <Button text="Next >" onClick={() => {}} />
+      </div>
     {/*
       <div>
         <div className={"w-full flex flex-row mt-0 font-mono font-semibold space-x-2 px-4 text-slate-400"}>
