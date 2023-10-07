@@ -1,11 +1,11 @@
 "use client";
 
+import Button from './components/button';
 import Chart from 'chart.js/auto';
 import Header from "./index/Header";
 import Image from 'next/image'
 import ImageCanvas from './index/ImageCanvas';
 import { motion } from 'framer-motion';
-import Button from './components/button';
 
 const config = {
   type: 'line',
@@ -62,8 +62,8 @@ export default function Home() {
             <Button text="Restart ⏹︎" onClick={() => {}} />
             </div>
 
-            {/* Chart */}
-            {/* {config && <canvas id="myChart" width="400" height="400"></canvas>} */}
+            { Chart }
+            { {config && <canvas id="myChart" width="400" height="400"></canvas>} }
           </div>
         </div>
   </div>*/}
