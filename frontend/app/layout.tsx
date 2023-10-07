@@ -20,7 +20,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className + " flex flex-col"}>
         <Header />
-        <main className="grow pt-5 px-12 justify-between background bg-slate-900 overflow-hidden">
+        <main className="flex-1 pt-1 px-12 justify-between background bg-slate-900 overflow-hidden">
           {children}
         </main>
       </body>
