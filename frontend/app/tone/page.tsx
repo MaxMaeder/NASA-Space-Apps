@@ -14,10 +14,17 @@ const json = require('./my_plot.json');
 json.sort((a: Star, b: Star) => {
     return a.x - b.x;
 });
-console.log(json);
 
 export default function TonePage() {
     const maxX = Math.round(json[json.length - 1].x);
+    var minSize = json[0].size, maxSize = json[0].size;
+    var array1 = json.map((star: Star) => star.size);
+    array1.forEach((element: number) => {
+        minSize = Math.min(minSize, element);
+        maxSize = Math.max(maxSize, element);
+    });
+    const step = Math.round((maxSize - minSize) / 125);
+
     let xIndex = 0;
     let i = 0;
 
@@ -30,7 +37,9 @@ export default function TonePage() {
     function playSequence() {
         setTimeout(() => {
             if(xIndex >= json[i].x) {
-                console.log(Math.log(json[i].size));
+                const number = Math.round((json[i].size - minSize) / step);
+                console.log(number)
+
                 // const osc = new Tone.Oscillator(json[i].y, "sine").toDestination();
                 // osc.start();
                 // osc.stop("+0.5");
