@@ -2,7 +2,7 @@
 
 import Button from './components/button';
 import Chart from 'chart.js/auto';
-import Header from "./index/Header";
+import Header from "./index/header";
 import Image from 'next/image'
 import ImageCanvas from './index/ImageCanvas';
 import constrain from './util/constrain';
