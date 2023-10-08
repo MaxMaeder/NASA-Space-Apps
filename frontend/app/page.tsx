@@ -2,30 +2,9 @@
 
 import BackgroundImage from './index/BackgroundImage';
 import Button from './components/button';
-import Chart from 'chart.js/auto';
-// import Header from "./index/header";
-import Image from 'next/image'
 import ImageCanvas from './index/ImageCanvas';
 import constrain from './util/constrain';
-import { motion } from 'framer-motion';
 import { useState } from 'react';
-
-const config = {
-  type: 'line',
-  data: {},
-  options: {
-    responsive: true,
-    plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Chart.js Line Chart'
-      }
-    }
-  },
-};
 
 const images = ["test.png", "test2.png"];
 
@@ -49,7 +28,6 @@ export default function Home() {
           <Button text="Restart ⏹︎" onClick={() => {}} />
           <Button text="Next >" onClick={() => changeImg(1)} />
         </div>
-        {/*<p className={"text-sm text-slate-800 px-3 mb-2"}>Created for the Nasa Space Apps hackathon fall, 2023 - By Aishani Das-Ghosh, Jeremy Kintana, Max Maeder, Rahul Hathwar</p>*/}
       </div>
     </div>
   )
