@@ -28,7 +28,7 @@ const minorChords = [
     ["B", "D", "F#"],
 ];
 const allChords = [...majorChords, ...minorChords];
-let chosen_chord = Math.floor(Math.random() * allChords.length);
+let chosen_chord = 12;
 
 const octaves = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const octaveTimeMultiplier = [1.2, 1, 0.8, 0.7, 0.3, 0.05, 0.01, 0.05];
@@ -94,7 +94,7 @@ function playSequence(res?: () => void) {
     //         res();
     //     }
     // }, TEMPO_DELAY);
-
+    console.log(Tone.now());
     for(let i = 0; i < queue.length; i++) {
         if((i + 1) % 3 == 1) {
             let note_length = LONG_NOTE;
@@ -104,18 +104,24 @@ function playSequence(res?: () => void) {
             synth.triggerAttackRelease(queue[i][0], (queue[i][1]*note_length) + "s", (TEMPO_DELAY*i) + "s");
         }
     }
+
+    setTimeout(() => {
+        if (res) {
+            res();
+            console.log("Done!")
+        }
+    }, TEMPO_DELAY*queue.length*1000);
 }
 
 export default async function play(data:string) {
     console.log(data);
     loadData(data);
-    chosen_chord = Math.floor(Math.random() * allChords.length);
+    chosen_chord = 12;
     isPlaying = true;
 
     await Tone.start();
     return new Promise((resolve, reject) => {
         playSequence(() => resolve("Done!"));
-        Tone.Transport.start();
         queueIndex = 0;
     })
 }
