@@ -36,6 +36,8 @@ const minorChords = [
     ["B", "D", "F#"],
 ];
 
+const octaves = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
 // function chordToToneFrequency(chord:String[]) {
 //     return chord.map(note => Tone.Frequency(note.toString()));
 // }
@@ -81,13 +83,16 @@ const sampler = new Tone.Sampler({
 }).toDestination();
 
 export default function TonePage() {
+    const NUM_NOTES= 8;
+    const CHOSEN_CHORD = 12;
+
     var minY = stars[0].y, maxY = stars[0].y;
     var array1 = stars.map((star: Star) => star.y);
     array1.forEach((element: number) => {
         minY = Math.min(minY, element);
         maxY = Math.max(maxY, element);
     });
-    const step = Math.round((maxY - minY) / 14);
+    const step = Math.round((maxY - minY) / NUM_NOTES);
 
     var movingAverage = [0, 0, 0, 0, 0];
 
@@ -96,18 +101,27 @@ export default function TonePage() {
 
     stars.forEach((element: Star) => {
         let number = Math.round((element.y - minY) / step);
-        if (number >= 14) { number = 14; }
+        if (number > NUM_NOTES - 1) { number = NUM_NOTES - 1; }
 
         movingAverage.shift();
         movingAverage.push(number);
 
-        let total = 0;
+        let movingAverageTotal = 0;
         movingAverage.forEach((yPos: number) => {
-            total += yPos;
+            movingAverageTotal += yPos;
         });
-        total = Math.round(total / 5);
+        let octaveFromMovingAverage = Math.round(movingAverageTotal / 5);
 
-        queue.push(allChords[total]);
+        console.log(octaveFromMovingAverage);
+
+        const octave = octaves[octaveFromMovingAverage];
+        const note1 = Tone.Frequency(allChords[CHOSEN_CHORD][0] + octave.toString());
+        const note2 = Tone.Frequency(allChords[CHOSEN_CHORD][1] + octave.toString());
+        const note3 = Tone.Frequency(allChords[CHOSEN_CHORD][2] + octave.toString());
+        const notes = [note1, note2, note3];
+
+        queue.push(notes);
+        // queue.push(allChords[12])
     });
 
     const play = () => {
@@ -122,12 +136,12 @@ export default function TonePage() {
             const vibrato = new Tone.Vibrato(5, 0.1).toDestination();
             const synth = new Tone.PolySynth().toDestination();
             synth.connect(vibrato);
-            const octave = Math.round(Math.random() * 1) + 3;
-            const note1 = Tone.Frequency(queue[queueIndex][0].toString() + octave.toString());
-            const note2 = Tone.Frequency(queue[queueIndex][1].toString() + octave.toString());
-            const note3 = Tone.Frequency(queue[queueIndex][2].toString() + octave.toString());
-            const notes = [note1, note2, note3];
-            synth.triggerAttackRelease(notes, "0.24s");
+            // const octave = Math.round(Math.random() * 4) + 1;
+            // const note1 = Tone.Frequency(queue[queueIndex][0].toString() + octave.toString());
+            // const note2 = Tone.Frequency(queue[queueIndex][1].toString() + octave.toString());
+            // const note3 = Tone.Frequency(queue[queueIndex][2].toString() + octave.toString());
+            // const notes = [note1, note2, note3];
+            synth.triggerAttackRelease(queue[queueIndex], "0.2s");
 
             queueIndex++;
             if(queueIndex < queue.length) {
