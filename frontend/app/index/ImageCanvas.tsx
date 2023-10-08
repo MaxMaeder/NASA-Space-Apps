@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 
 import constrain from "../util/constrain";
+import { useElementSize } from "usehooks-ts";
 
 type ImageCanvasType = {
   imgSrc: string
@@ -8,17 +9,14 @@ type ImageCanvasType = {
 
 const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [containerRef, { width: cWidth, height: cHeight }] = useElementSize();
   const size = useRef(.8);
   
   const drawImg = useCallback(async () => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const canvasRect = canvas.getBoundingClientRect();
-    const cHeight = canvasRect.height;
-    const cWidth = canvasRect.width;
-
-    const context = canvas.getContext('2d')
+    const context = canvas.getContext("2d");
     if (!context) return;
 
     const image = new Image();
@@ -27,7 +25,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
       image.onload = resolve;
     });
 
-    canvas.height = cHeight / 1.2; // ADDED 1.2 to make it fit better;
+    canvas.height = cHeight;
     canvas.width = cWidth;
     
     const updateImage = () => {
@@ -45,6 +43,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     updateImage();
 
     window.addEventListener("wheel", (event) => {
+      event.preventDefault();
       const scrollEvent = event as WheelEvent;
 
       const delta = scrollEvent.deltaY * .0005;
@@ -52,13 +51,17 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
 
       updateImage();
     });
-  }, [imgSrc]);
+  }, [cHeight, cWidth, imgSrc]);
 
   useEffect(() => {
-    drawImg()
+    drawImg();
   }, [canvasRef, drawImg, imgSrc]);
 
-  return <canvas ref={canvasRef} className="z-10"></canvas>
+  return (
+    <div ref={containerRef} className="z-10 h-full">
+      <canvas ref={canvasRef}></canvas>
+    </div>
+  );
 }
 
 export default ImageCanvas;
