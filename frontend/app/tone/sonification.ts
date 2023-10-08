@@ -28,15 +28,19 @@ const minorChords = [
     ["B", "D", "F#"],
 ];
 const allChords = [...majorChords, ...minorChords];
-const CHOSEN_CHORD = 12;
+let chosen_chord = Math.floor(Math.random() * allChords.length);
 
 const octaves = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const octaveTimeMultiplier = [1.2, 1, 0.8, 0.7, 0.3, 0.05, 0.01, 0.05];
 const NUM_NOTES = octaves.length;
 
 const vibrato = new Tone.Vibrato(5, 0.1).toDestination();
 const synth = new Tone.PolySynth().toDestination();
 synth.connect(vibrato);
-const TEMPO_DELAY = 250;
+
+const TEMPO_DELAY = 0.25;
+const SHORT_NOTE = 0.75;
+const LONG_NOTE = SHORT_NOTE * 2;
 
 let queueIndex = 0;
 let queue: Tone.FrequencyClass[][] = [];
@@ -70,35 +74,48 @@ function loadData(data: any) {
         let octaveFromMovingAverage = Math.round(movingAverageTotal / 5);
 
         const octave = octaves[octaveFromMovingAverage];
-        const note1 = Tone.Frequency(allChords[CHOSEN_CHORD][0] + octave.toString());
-        const note2 = Tone.Frequency(allChords[CHOSEN_CHORD][1] + octave.toString());
-        const note3 = Tone.Frequency(allChords[CHOSEN_CHORD][2] + octave.toString());
-        const notes = [note1, note2, note3];
+        const note1 = Tone.Frequency(allChords[chosen_chord][0] + octave.toString());
+        const note2 = Tone.Frequency(allChords[chosen_chord][1] + octave.toString());
+        const note3 = Tone.Frequency(allChords[chosen_chord][2] + octave.toString());
+        const notes = [[note1, note2, note3], octaveTimeMultiplier[octaveFromMovingAverage]];   
 
         queue.push(notes);
     });
 }
 
 function playSequence(res?: () => void) {
-    setTimeout(() => {
-        synth.triggerAttackRelease(queue[queueIndex], "0.2s");
+    // setTimeout(() => {
+    //     synth.triggerAttackRelease(queue[queueIndex], "0.2s");
 
-        queueIndex++;
-        if(queueIndex < queue.length && isPlaying) {
-            playSequence(res);
-        } else if (res) {
-            res();
+    //     queueIndex++;
+    //     if(queueIndex < queue.length && isPlaying) {
+    //         playSequence(res);
+    //     } else if (res) {
+    //         res();
+    //     }
+    // }, TEMPO_DELAY);
+
+    for(let i = 0; i < queue.length; i++) {
+        if((i + 1) % 3 == 1) {
+            let note_length = LONG_NOTE;
+            synth.triggerAttackRelease(queue[i][0], (queue[i][1]*note_length) + "s", (TEMPO_DELAY*i) + "s");
+        } else {
+            let note_length = SHORT_NOTE;
+            synth.triggerAttackRelease(queue[i][0], (queue[i][1]*note_length) + "s", (TEMPO_DELAY*i) + "s");
         }
-    }, TEMPO_DELAY);
+    }
 }
 
 export default async function play(data:string) {
     console.log(data);
     loadData(data);
+    chosen_chord = Math.floor(Math.random() * allChords.length);
     isPlaying = true;
 
+    await Tone.start();
     return new Promise((resolve, reject) => {
         playSequence(() => resolve("Done!"));
+        Tone.Transport.start();
         queueIndex = 0;
     })
 }
