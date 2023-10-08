@@ -93,6 +93,7 @@ function playSequence(res?: () => void) {
 }
 
 export default async function play(data:string) {
+    console.log(data);
     loadData(data);
     isPlaying = true;
 
