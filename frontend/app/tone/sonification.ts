@@ -41,7 +41,7 @@ const TEMPO_DELAY = 250;
 let queueIndex = 0;
 let queue: Tone.FrequencyClass[][] = [];
 
-export function loadData(data:string) {
+function loadData(data:string) {
     const stars = JSON.parse(data);
 
     var minY = stars[0].y, maxY = stars[0].y;
@@ -89,7 +89,9 @@ function playSequence() {
     }, TEMPO_DELAY);
 }
 
-export async function play() {
+export default async function play(data:string) {
+    loadData(data);
+
     return new Promise((resolve, reject) => {
         playSequence();
         queueIndex = 0;
