@@ -43,7 +43,6 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     updateImage();
 
     window.addEventListener("wheel", (event) => {
-      event.preventDefault();
       const scrollEvent = event as WheelEvent;
 
       const delta = scrollEvent.deltaY * .0005;
@@ -51,11 +50,11 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
 
       updateImage();
     });
-  }, [cHeight, cWidth, imgSrc]);
+  }, [canvasRef, cHeight, cWidth, imgSrc]);
 
   useEffect(() => {
     drawImg();
-  }, [canvasRef, drawImg, imgSrc]);
+  }, [drawImg]);
 
   return (
     <div ref={containerRef} className="z-10 h-full">
