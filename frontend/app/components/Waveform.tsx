@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
+
 import { motion } from 'framer-motion';
 
 const delayBetweenBars = 150; // Milliseconds
@@ -74,7 +75,7 @@ export default function Waveform() {
         let barArray: any[] = []; // Return array of bars
     
         let newBar = (freq: number): any => {
-            return <motion.div className={"bg-yellow-500 rounded-lg w-full"} style={{"height": 0}}
+            return <motion.div className={"bg-gray-500 rounded-lg w-full opacity-50"} style={{"height": 0}}
                 animate={{ height: freq > height ? height : freq }}
                 transition={{ duration: 0.25 }}
             ></motion.div>;
@@ -90,7 +91,7 @@ export default function Waveform() {
     }
 
     return (
-        <div className={"w-full bg-slate-800 shadow-xl bg-rounded rounded-xl flex flex-row space-x-2"} style={{"height": height}}>
+        <div className={"w-full flex flex-row space-x-2"} style={{"height": height}}>
             { constructBars() }
         </div>
     );
