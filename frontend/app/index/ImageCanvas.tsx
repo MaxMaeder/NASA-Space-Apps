@@ -16,11 +16,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const canvasRect = canvas.getBoundingClientRect();
-    //const cHeight = canvasRect.height;
-    //const cWidth = canvasRect.width;
-
-    const context = canvas.getContext('2d')
+    const context = canvas.getContext("2d");
     if (!context) return;
 
     const image = new Image();
@@ -29,7 +25,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
       image.onload = resolve;
     });
 
-    canvas.height = cHeight; // ADDED 1.2 to make it fit better;
+    canvas.height = cHeight;
     canvas.width = cWidth;
     
     const updateImage = () => {
@@ -47,6 +43,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
     updateImage();
 
     window.addEventListener("wheel", (event) => {
+      event.preventDefault();
       const scrollEvent = event as WheelEvent;
 
       const delta = scrollEvent.deltaY * .0005;
@@ -62,7 +59,7 @@ const ImageCanvas = ({imgSrc}: ImageCanvasType) => {
 
   return (
     <div ref={containerRef} className="z-10 h-full">
-      <canvas ref={canvasRef} ></canvas>
+      <canvas ref={canvasRef}></canvas>
     </div>
   );
 }
