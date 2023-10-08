@@ -1,8 +1,6 @@
 "use client";
 
 import * as Tone from 'tone';
-import Image from 'next/image';
-import { browser } from 'process';
 
 type Star = {
     x: number;
@@ -10,12 +8,38 @@ type Star = {
     size: number;
 }
 
-const json = require('./my_plot.json');
-json.sort((a: Star, b: Star) => {
+const stars = require('./my_plot.json');
+// Sort from left x to right x
+stars.sort((a: Star, b: Star) => {
     return a.x - b.x;
 });
 
 const notes = ["A0", "B0", "C1", "D1", "E1", "F1", "G1", "A1", "B1", "C2", "D2", "E2", "F2", "G2", "A2", "B2", "C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4", "C5", "D5", "E5", "F5", "G5", "A5", "B5", "C6", "D6", "E6", "F6", "G6", "A6", "B6", "C7", "D7", "E7", "F7", "G7", "A7", "B7", "C8"];
+
+const majorChords = [
+    ["C", "E", "G"],
+    ["D", "F#", "A"],
+    ["E", "G#", "B"],
+    ["F", "A", "C"],
+    ["G", "B", "D"],
+    ["A", "C#", "E"],
+    ["B", "D#", "F#"],
+];
+
+const minorChords = [
+    ["C", "D#", "G"],
+    ["D", "F", "A"],
+    ["E", "G", "B"],
+    ["F", "G#", "C"],
+    ["G", "A#", "D"],
+    ["A", "C", "E"],
+    ["B", "D", "F#"],
+];
+
+// function chordToToneFrequency(chord:String[]) {
+//     return chord.map(note => Tone.Frequency(note.toString()));
+// }
+const allChords:String[][] = [...majorChords, ...minorChords];
 
 const sampler = new Tone.Sampler({
     urls: {
@@ -56,84 +80,87 @@ const sampler = new Tone.Sampler({
     baseUrl: "https://tonejs.github.io/audio/salamander/"
 }).toDestination();
 
-const keys = new Tone.Players({
-    urls: {
-        0: "A1.mp3",
-        1: "Fs5.mp3",
-        2: "C7.mp3",
-        3: "A6.mp3",
-    },
-    fadeOut: "64n",
-    
-    baseUrl: "https://tonejs.github.io/audio/salamander/"
-}).toDestination();
-
 export default function TonePage() {
-    const maxX = Math.round(json[json.length - 1].x);
-    // var minSize = json[0].size, maxSize = json[0].size;
-    // var array1 = json.map((star: Star) => star.size);
-    // array1.forEach((element: number) => {
-    //     minSize = Math.min(minSize, element);
-    //     maxSize = Math.max(maxSize, element);
-    // });
-    // const step = Math.round((maxSize - minSize) / 52);
-
-    var minY = json[0].y, maxY = json[0].y;
-    var array1 = json.map((star: Star) => star.y);
+    var minY = stars[0].y, maxY = stars[0].y;
+    var array1 = stars.map((star: Star) => star.y);
     array1.forEach((element: number) => {
         minY = Math.min(minY, element);
         maxY = Math.max(maxY, element);
     });
-    const step = Math.round((maxY - minY) / 52);
+    const step = Math.round((maxY - minY) / 14);
 
     var movingAverage = [0, 0, 0, 0, 0];
 
-    let xIndex = 0;
-    let i = 0;
+    let queue: String[][] = [];
+    let queueIndex = 0;
+
+    stars.forEach((element: Star) => {
+        let number = Math.round((element.y - minY) / step);
+        if (number >= 14) { number = 14; }
+
+        movingAverage.shift();
+        movingAverage.push(number);
+
+        let total = 0;
+        movingAverage.forEach((yPos: number) => {
+            total += yPos;
+        });
+        total = Math.round(total / 5);
+
+        queue.push(allChords[total]);
+    });
 
     const play = () => {
         playSequence();
-        xIndex = 0;
-        i = 0;
+        queueIndex = 0;
     }
 
     function playSequence() {
         setTimeout(() => {
-            if(xIndex >= json[i].x) {
-                let number = Math.round((json[i].y - minY) / step);
-                if (number >= 52) { number = 51; }
+            // sampler.triggerAttackRelease(queue[queueIndex].toString(), "0.1s");
+            // const reverb = new Tone.Reverb(100).toDestination();
+            const vibrato = new Tone.Vibrato(5, 0.1).toDestination();
+            const synth = new Tone.PolySynth().toDestination();
+            synth.connect(vibrato);
+            const octave = Math.round(Math.random() * 1) + 3;
+            const note1 = Tone.Frequency(queue[queueIndex][0].toString() + octave.toString());
+            const note2 = Tone.Frequency(queue[queueIndex][1].toString() + octave.toString());
+            const note3 = Tone.Frequency(queue[queueIndex][2].toString() + octave.toString());
+            const notes = [note1, note2, note3];
+            synth.triggerAttackRelease(notes, "0.24s");
 
-                // const vol = new Tone.Volume(-12).toDestination();
-                // const osc = new Tone.Oscillator(json[i].y, "sine").toDestination().connect(vol);
-                // osc.start();
-                // osc.stop("+0.5");
-                
-                // console.log(number)
-
-                // console.log(notes[number])
-                
-                movingAverage.shift();
-                movingAverage.push(number);
-                var total = 0;
-                movingAverage.forEach((element: number) => {
-                    total += element;
-                });
-                total = Math.round(total / 5);
-                console.log(movingAverage, notes[total], total);
-                
-
-                // sampler.triggerAttackRelease(notes[number], "0.1s");
-
-                const synth = new Tone.Synth().toDestination();
-                synth.triggerAttackRelease(notes[number], "0.5s");
-                i++;
-            }
-
-            xIndex++;
-            if (xIndex < maxX) {
+            queueIndex++;
+            if(queueIndex < queue.length) {
                 playSequence();
             }
-        }, 10);
+
+            // if(xIndex >= json[i].x) {
+            //     let number = Math.round((json[i].y - minY) / step);
+            //     if (number >= 52) { number = 51; }
+                
+            //     movingAverage.shift();
+            //     movingAverage.push(number);
+            //     var total = 0;
+            //     movingAverage.forEach((element: number) => {
+            //         total += element;
+            //     });
+            //     total = Math.round(total / 5);
+            //     console.log(movingAverage, notes[total], total, i);
+                
+
+            //     // sampler.triggerAttackRelease(notes[number], "0.1s");
+
+            //     const synth = new Tone.PolySynth().toDestination();
+            //     // synth.triggerAttackRelease(notes[number], "0.5s");
+            //     synth.triggerAttackRelease(["C5", "D#5", "G5"], "0.25s");
+            //     i++;
+            // }
+
+            // xIndex++;
+            // if (xIndex < maxX) {
+            //     playSequence();
+            // }
+        }, 250);
     }
 
     return (
