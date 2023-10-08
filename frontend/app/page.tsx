@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import BackgroundImage from './index/BackgroundImage';
 import Button from './components/button';
+import Waveform from './components/Waveform';
 import ImageCanvas from './index/ImageCanvas';
 import constrain from './util/constrain';
 import images from "./images"
@@ -65,6 +66,8 @@ export default function Home() {
     <div className="flex flex-col overflow-hidden relative h-full">
       <ImageCanvas imgSrc={images[imgNum].image} />
       <BackgroundImage imgSrc={images[imgNum].image}/>
+
+      <div className={"w-full absolute top-24 left-0 rotate-180"}><Waveform></Waveform></div>
 
       <div className="absolute bottom-10 w-full z-20">
         <div className="flex justify-center space-x-4">

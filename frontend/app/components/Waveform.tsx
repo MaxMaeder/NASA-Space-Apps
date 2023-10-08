@@ -53,7 +53,7 @@ function createBuffer(newBuf: any[]) {
 }
 
 export default function Waveform() {
-    let [height, setHeight] = useState<number>(240); // Height of container
+    let [height, setHeight] = useState<number>(640); // Height of container
     let [barHeights, setBarHeights] = useState<number[]>([]); // Array of bar heights [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     useEffect(() => {
@@ -90,7 +90,7 @@ export default function Waveform() {
     }
 
     return (
-        <div className={"w-full bg-slate-400 bg-rounded flex flex-row space-x-2"} style={{"height": height}}>
+        <div className={"w-full bg-slate-800 shadow-xl bg-rounded rounded-xl flex flex-row space-x-2"} style={{"height": height}}>
             { constructBars() }
         </div>
     );

@@ -1,6 +1,6 @@
 import './globals.css'
 
-import Header from './index/Header'
+import Header from './index/header'
 import { Inter } from 'next/font/google'
 import type { Metadata } from 'next'
 
