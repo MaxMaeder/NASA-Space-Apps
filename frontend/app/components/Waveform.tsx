@@ -3,9 +3,28 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { motion } from 'framer-motion';
+
 // import { loadData } from '../tone/sonification';
 
 const delayBetweenBars = 150; // Milliseconds
+
+function shuffle(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle.
+    while (currentIndex > 0) {
+  
+      // Pick a remaining element.
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
 
 // Create a queue of buffers
 let bufQueue: any = [[25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
@@ -409,6 +428,8 @@ let bufQueue: any = [[25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
                     [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000],
                     [125, 250, 375, 500, 625, 750, 875, 1000, 1125, 1250]
                     ];
+
+                    bufQueue = shuffle(bufQueue.map(e => shuffle(e)));
 
 let bufQueueTemplate: any = [[25, 50, 75, 100, 125, 150, 175, 200, 225, 250],
                     [50, 100, 150, 200, 250, 300, 350, 400, 450, 500],
