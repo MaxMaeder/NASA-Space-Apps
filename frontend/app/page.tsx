@@ -33,7 +33,7 @@ export default function Home() {
     await new Promise(r => setTimeout(r, 500));
     await play(data);
 
-    if (isPlayingRef.current) {
+    if (isPlayingRef.current && isPlaying) {
       let _imgNum = imgNum;
       _imgNum++;
       if (_imgNum >= images.length)
@@ -70,7 +70,6 @@ export default function Home() {
         <div className="flex justify-center space-x-4">
           <Button text="< Previous" onClick={() => changeImg(-1)} />
           <Button text={isPlaying ? "Stop ⏹︎" : "Start ⏵︎"} onClick={togglePlaying} />
-          <Button text="Restart ⏹︎" onClick={() => setImgNum(0)} />
           <Button text="Next >" onClick={() => changeImg(1)} />
         </div>
       </div>
