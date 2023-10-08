@@ -40,9 +40,10 @@ const TEMPO_DELAY = 250;
 
 let queueIndex = 0;
 let queue: Tone.FrequencyClass[][] = [];
+let isPlaying = true;
 
-function loadData(data:string) {
-    const stars = JSON.parse(data);
+function loadData(data: any) {
+    const stars = data;
 
     var minY = stars[0].y, maxY = stars[0].y;
     var array1 = stars.map((star: Star) => star.y);
@@ -78,23 +79,29 @@ function loadData(data:string) {
     });
 }
 
-function playSequence() {
+function playSequence(res?: () => void) {
     setTimeout(() => {
         synth.triggerAttackRelease(queue[queueIndex], "0.2s");
 
         queueIndex++;
-        if(queueIndex < queue.length) {
-            playSequence();
+        if(queueIndex < queue.length && isPlaying) {
+            playSequence(res);
+        } else if (res) {
+            res();
         }
     }, TEMPO_DELAY);
 }
 
 export default async function play(data:string) {
     loadData(data);
+    isPlaying = true;
 
     return new Promise((resolve, reject) => {
-        playSequence();
+        playSequence(() => resolve("Done!"));
         queueIndex = 0;
-        resolve("Done!");
     })
+}
+
+export function stopPlaying() {
+    isPlaying = false;
 }
