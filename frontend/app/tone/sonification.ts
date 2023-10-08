@@ -42,7 +42,7 @@ let queueIndex = 0;
 let queue: Tone.FrequencyClass[][] = [];
 
 function loadData(data:string) {
-    const stars = JSON.parse(data);
+    const stars = data;
 
     var minY = stars[0].y, maxY = stars[0].y;
     var array1 = stars.map((star: Star) => star.y);
@@ -90,6 +90,7 @@ function playSequence() {
 }
 
 export default async function play(data:string) {
+    console.log(data);
     loadData(data);
 
     return new Promise((resolve, reject) => {
