@@ -34,9 +34,8 @@ const octaves = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const octaveTimeMultiplier = [1.2, 1, 0.8, 0.7, 0.3, 0.05, 0.01, 0.05];
 const NUM_NOTES = octaves.length;
 
-const vibrato = new Tone.Vibrato(5, 0.1).toDestination();
-const synth = new Tone.PolySynth().toDestination();
-synth.connect(vibrato);
+let vibrato;
+let synth;
 
 const TEMPO_DELAY = 0.25;
 const SHORT_NOTE = 0.75;
@@ -48,6 +47,9 @@ let isPlaying = true;
 
 function loadData(data: any) {
     const stars = data;
+    vibrato = new Tone.Vibrato(5, 0.1).toDestination();
+    synth = new Tone.PolySynth().toDestination();
+    synth.connect(vibrato);
 
     var minY = stars[0].y, maxY = stars[0].y;
     var array1 = stars.map((star: Star) => star.y);
@@ -81,6 +83,7 @@ function loadData(data: any) {
 
         queue.push(notes);
     });
+    console.log(queue);
 }
 
 function playSequence(res?: () => void) {
